@@ -17,4 +17,4 @@ GPIO.add_event_callback(channel, callback)  # assign function to GPIO PIN, Run f
  
 # infinite loop
 while True:
-        time.sleep(1)import RPi.GPIO as GPIO
+        time.sleep(1)
