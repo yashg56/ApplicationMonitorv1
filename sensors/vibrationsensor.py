@@ -23,7 +23,7 @@ def send_mail():
     server.login(email_address, "corporatex")
     msg = "This is a test email!"
     
-    if(current_state == State.ON):
+    if(current_state == State.ACTIVE):
         server.sendmail(email_address, email_address, msg)
         server.quit()
         print("Sending mail...")
