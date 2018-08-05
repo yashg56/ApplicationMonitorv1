@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 import smtplib
 import sys
-#FIGURE OUT HOW TO GET THE STATE CLASS INTO THIS CODE
+from state import State
 
 #GPIO SETUP
 channel = 17
@@ -15,7 +15,7 @@ current_state = State.INIT
 def callback(channel):
     global callback_timestamp
     callback_timestamp = time.time()
-    current_state = state.ON
+    current_state = State.ACTIVE
      
 def send_mail():
     server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -23,7 +23,7 @@ def send_mail():
     server.login(email_address, "corporatex")
     msg = "This is a test email!"
     
-    if(current_state == State.ACTIVE):
+    if(current_state == State.FINISHED):
         server.sendmail(email_address, email_address, msg)
         server.quit()
         print("Sending mail...")
@@ -39,9 +39,10 @@ while True:
     print(callback_timestamp)
     print("------------------------")
 
-    if((current_time - callback_timestamp) > 10):
-        send_mail()
-        current_state = State.FINISHED
+    if(current_state == State.FINISHED):
+        if((current_time - callback_timestamp) > 10):
+            current_state = State.FINISHED 
+            send_mail()
             
             
     if(current_state == State.FINISHED):
@@ -51,10 +52,3 @@ while True:
 
         
     time.sleep(1)
-       
-       
-
-
-
-
-
